@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatic MP3 Sound API</title>
+</head>
+<body>
+
+<script>
+    var soundDirectory = './sounds/';
+
+    function playRandomSound() {
+        fetch(soundDirectory)
+            .then(response => response.text())
+            .then(text => {
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(text, 'text/html');
+                var soundFiles = Array.from(doc.querySelectorAll('a'))
+                    .map(a => a.href)
+                    .filter(href => href.endsWith('.mp3'));
+
+                var randomSoundFile = soundFiles[Math.floor(Math.random() * soundFiles.length)];
+
+                var audioElement = new Audio(randomSoundFile);
+                audioElement.play();
+                audioElement.addEventListener('ended', playRandomSound);
+            })
+            .catch(error => console.error('Error fetching sound directory:', error));
+    }
+
+    // Initial call to play the first sound
+    playRandomSound();
+</script>
+
+</body>
+</html>
