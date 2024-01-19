@@ -7,8 +7,13 @@
 </head>
 <body>
 
+<audio id="audioElement" autoplay controls>
+    Your browser does not support the audio element.
+</audio>
+
 <script>
     var soundDirectory = './sounds/';
+    var audioElement = document.getElementById('audioElement');
 
     function playRandomSound() {
         fetch(soundDirectory)
@@ -22,8 +27,11 @@
 
                 var randomSoundFile = soundFiles[Math.floor(Math.random() * soundFiles.length)];
 
-                var audioElement = new Audio(randomSoundFile);
+                // Set the source and play the audio
+                audioElement.src = randomSoundFile;
                 audioElement.play();
+
+                // Listen for 'ended' event to play another random sound
                 audioElement.addEventListener('ended', playRandomSound);
             })
             .catch(error => console.error('Error fetching sound directory:', error));
