@@ -12,8 +12,7 @@
 </audio>
 
 <script>
-    var soundDirectory = './';
-    var audioElement = document.getElementById('audioElement');
+    var soundDirectory = 'https://wesamdev.github.io/QuranRadioAPI/radio/NasserAlQatami/';
 
     function playRandomSound() {
         fetch(soundDirectory)
@@ -25,14 +24,19 @@
                     .map(a => a.href)
                     .filter(href => href.endsWith('.mp3'));
 
-                var randomSoundFile = soundFiles[Math.floor(Math.random() * soundFiles.length)];
+                if (soundFiles.length > 0) {
+                    var randomSoundFile = soundFiles[Math.floor(Math.random() * soundFiles.length)];
 
-                // Set the source and play the audio
-                audioElement.src = randomSoundFile;
-                audioElement.play();
+                    // Set the source and play the audio
+                    var audioElement = document.getElementById('audioElement');
+                    audioElement.src = randomSoundFile;
+                    audioElement.play();
 
-                // Listen for 'ended' event to play another random sound
-                audioElement.addEventListener('ended', playRandomSound);
+                    // Listen for 'ended' event to play another random sound
+                    audioElement.addEventListener('ended', playRandomSound);
+                } else {
+                    console.error('No sound files found in the directory.');
+                }
             })
             .catch(error => console.error('Error fetching sound directory:', error));
     }
